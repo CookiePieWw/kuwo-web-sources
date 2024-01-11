@@ -1,0 +1,144 @@
+# ###################################################################
+# Mp3tag Tag Source for KuwoMusic
+#
+# Search by KEYWORD
+#
+# This file needs to be stored in Mp3tag's tag sources directory. 
+# %APPDATA%\Mp3tag\data\sources
+#
+# Author: CookiePie (CookiePieQAQ@gmail.com)
+# ###################################################################
+
+[Name]=酷我音乐
+[BasedOn]=kuwo.cn
+[IndexUrl]=https://www.kuwo.cn/search/searchMusicBykeyWord?vipver=1&client=kt&ft=music&cluster=0&strategy=2012&encoding=utf8&rformat=json&mobi=1&issubtitle=1&show_copyright_off=1&pn=0&rn=50%s
+[AlbumUrl]=https://www.kuwo.cn/album_detail/
+[WordSeparator]=%20
+[IndexFormat]=%_preview%|%_url%|%Title%|%Artist%|%Album%|%Time%|
+[SearchBy]=keyword||%s%||&all=%s
+[Encoding]=url-utf-8
+
+[ParserScriptIndex]=...
+# ###################################################################
+#					I  N  D  E  X
+# ###################################################################
+replace "|" "$verticalBar()"
+json "ON" "current"
+
+json_select "TOTAL"
+
+ifnot "0"
+
+    json_foreach "abslist"
+
+        # Preview
+        say "https://www.kuwo.cn/play_detail/"
+        json_select "DC_TARGETID"
+        sayrest
+        say "|"
+
+        # URL
+        json_select "ALBUMID"
+        sayrest
+        say "|"
+
+        # Title
+        json_select "SONGNAME"
+        sayrest
+        say "|"
+
+        # Artist
+        json_select "ARTIST"
+        sayrest
+        say "|"
+
+        # Album
+        json_select "ALBUM"
+        sayrest
+        say "|"
+
+        # Time
+        json_select "web_timingonline"
+        sayrest
+        say "|"
+
+    saynewline
+
+    json_foreach_end
+
+endif
+
+json "off" "current"
+
+[ParserScriptAlbum]=...
+# ###################################################################
+#					A  L  B  U  M
+# ###################################################################
+Debug "on" "debug.out"
+replace "|" "$verticalBar()"
+
+# Album
+outputto "ALBUM"
+findline "<p class="song_name" data-v-a92a9166>"
+findinline "<p class="song_name" data-v-a92a9166>"
+sayuntil "</p>"
+
+# Album Artist
+outputto "ALBUMARTIST"
+findline "<span data-v-a92a9166>"
+findinline "<span data-v-a92a9166>"
+sayuntil "</span>"
+
+# Year
+outputto "DATE"
+findline "<span class="tip" data-v-a92a9166>"
+findinline "<span class="tip" data-v-a92a9166>"
+sayregexp "[0-9]+-[0-9]+-[0-9]+"
+
+# Cover URL
+outputto "COVERURL"
+findline "albumcover"
+findinline "albumcover\\u002F"
+say "https://img2.kuwo.cn/star/albumcover/"
+sayuntil "\\u002F"
+say "/"
+findinline "\\u002F"
+sayuntil "\\u002F"
+say "/"
+findinline "\\u002F"
+sayuntil "\\u002F"
+say "/"
+findinline "\\u002F"
+sayuntil "\""
+
+GotoLine 1
+
+findline "<span style="
+findinline "<span class=\"side3 pause\" data-v-5592f6e7>"
+# Track Loop
+do
+    findinline "<span class=\"side3 pause\" data-v-5592f6e7>"
+    findinline "<span style=\"display:;\" data-v-5592f6e7>"
+
+    # Track Title
+    outputto "TRACKS"
+    findinline "<a title=\""
+    sayuntil "\" href="
+    say "|"
+
+    # Artist
+    outputto "ARTIST"
+    findinline "<span title=\""
+    sayuntil "\" data-v-5592f6e7"
+    say "|"
+
+    # Track Time
+    outputto "_LENGTH"
+    findinline "<span data-v-5592f6e7>"
+    sayuntil "</span>"
+    say "|"
+
+    # Empty One to Avoid Error of Time
+    outputto "_EMPTY"
+
+while "</span>" 40
