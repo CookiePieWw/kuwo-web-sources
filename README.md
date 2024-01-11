@@ -1,2 +1,7 @@
-# kuwo-web-sources
-A mp3tag script to fetch album information from kuwo music
+# MP3Tag 酷我音乐源
+
+MP3Tag 是一套编辑各种不同音乐文件格式元数据（像是 ID3、APE tag）的免费软件。MP3Tag 的信息来源是互联网资源，由脚本聚合音乐平台上的信息。官方/民间提供的脚本大多属于国外平台，会缺很多国内的歌。这是一个从酷我音乐提取信息的脚本。
+
+## 使用方法
+
+把提供的 src 文件移到 MP3Tag 的 source 文件夹下，通常是在 %APPDATA%\Mp3tag\data\sources 中。
