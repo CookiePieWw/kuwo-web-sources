@@ -6,7 +6,6 @@
 # This file needs to be stored in Mp3tag's tag sources directory. 
 # %APPDATA%\Mp3tag\data\sources
 #
-# Author: CookiePie (CookiePieQAQ@gmail.com)
 # ###################################################################
 
 [Name]=酷我音乐
@@ -114,7 +113,6 @@ sayuntil "\""
 GotoLine 1
 
 findline "<span style="
-findinline "<span class=\"side3 pause\" data-v-5592f6e7>"
 # Track Loop
 do
     findinline "<span class=\"side3 pause\" data-v-5592f6e7>"
